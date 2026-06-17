@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
+import loginCampusUrl from '@/assets/login-campus.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -47,6 +48,7 @@ async function submit() {
 <template>
   <main class="login-page">
     <section class="login-visual">
+      <img class="login-visual-image" :src="loginCampusUrl" alt="" />
       <div class="system-name">智能课程作业提交与批改管理系统</div>
       <div class="system-meta">软件体系结构课程实践</div>
     </section>
@@ -86,18 +88,40 @@ async function submit() {
 }
 
 .login-visual {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   min-height: 100%;
   padding: 72px;
   color: #fff;
+  background: #14243d;
+}
+
+.login-visual::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
   background:
-    linear-gradient(120deg, rgba(23, 32, 51, 0.92), rgba(28, 72, 119, 0.72)),
-    url("https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&q=80") center/cover;
+    linear-gradient(120deg, rgba(12, 24, 43, 0.88), rgba(22, 68, 111, 0.58)),
+    linear-gradient(0deg, rgba(12, 24, 43, 0.58), rgba(12, 24, 43, 0.08) 42%);
+}
+
+.login-visual-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  opacity: 0.9;
 }
 
 .system-name {
+  position: relative;
+  z-index: 2;
   max-width: 720px;
   font-size: 44px;
   font-weight: 800;
@@ -105,6 +129,8 @@ async function submit() {
 }
 
 .system-meta {
+  position: relative;
+  z-index: 2;
   margin-top: 18px;
   color: #d8e4f7;
   font-size: 18px;

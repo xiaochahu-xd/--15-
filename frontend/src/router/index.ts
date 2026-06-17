@@ -22,7 +22,10 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/layouts/AppLayout.vue'),
-      redirect: '/dashboard',
+      redirect: () => {
+        const token = localStorage.getItem('coursework_token')
+        return token ? '/dashboard' : '/login'
+      },
       meta: { requiresAuth: true },
       children: [
         {
@@ -220,20 +223,16 @@ const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/dashboard'
+      redirect: '/login'
     }
   ]
 })
 
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
-  if (to.path === '/login' && authStore.isAuthenticated) {
-    if (!authStore.user) {
-      await authStore.fetchMe().catch(() => authStore.logout())
-    }
-    if (authStore.isAuthenticated) {
-      return '/dashboard'
-    }
+  if (to.path === '/login') {
+    authStore.logout()
+    return true
   }
 
   if (!to.meta.requiresAuth) {
@@ -247,15 +246,13 @@ router.beforeEach(async (to) => {
     }
   }
 
-  if (!authStore.user) {
-    try {
-      await authStore.fetchMe()
-    } catch {
-      authStore.logout()
-      return {
-        path: '/login',
-        query: { redirect: to.fullPath }
-      }
+  try {
+    await authStore.fetchMe()
+  } catch {
+    authStore.logout()
+    return {
+      path: '/login',
+      query: { redirect: to.fullPath }
     }
   }
 

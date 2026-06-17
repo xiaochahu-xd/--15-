@@ -24,8 +24,9 @@ http.interceptors.response.use(
     if (status === 401) {
       const authStore = useAuthStore()
       authStore.logout()
-      router.replace('/login')
-      ElMessage.warning(message)
+      if (router.currentRoute.value.path !== '/login') {
+        router.replace('/login')
+      }
     } else if (status === 403) {
       ElMessage.error('权限不足')
       router.replace('/403')
