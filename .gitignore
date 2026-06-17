@@ -1,0 +1,14 @@
+backend/target/
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+frontend/dev-server.*.log
+backend/uploads/
+.uploads/
+uploads/
+.publish-test/
+
+.idea/
+.vscode/
+*.log
+*.xlsx

@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: coursework-system
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/coursework_system?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/init.sql
+      continue-on-error: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 60MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+security:
+  jwt:
+    secret: coursework-system-local-development-secret-change-before-production
+    expiration-minutes: 120
+
+logging:
+  level:
+    com.coursework.system: info
+
+app:
+  file-storage:
+    root: uploads
+  similarity:
+    threshold: 0.90
+    ngram-size: 2
