@@ -3,6 +3,7 @@ package com.coursework.system.auth.controller;
 import com.coursework.system.auth.dto.AuthResponse;
 import com.coursework.system.auth.dto.CurrentUserResponse;
 import com.coursework.system.auth.dto.LoginRequest;
+import com.coursework.system.auth.dto.RegisterRequest;
 import com.coursework.system.auth.service.AuthService;
 import com.coursework.system.common.response.ApiResponse;
 import com.coursework.system.common.security.UserPrincipal;
@@ -28,6 +29,12 @@ public class AuthController {
     @PostMapping("/login")
     public ApiResponse<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         return ApiResponse.success(authService.login(loginRequest, request));
+    }
+
+    @PostMapping("/register")
+    public ApiResponse<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest,
+                                              HttpServletRequest request) {
+        return ApiResponse.success("注册成功", authService.register(registerRequest, request));
     }
 
     @GetMapping("/me")

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { loginApi, meApi } from '@/api/auth'
+import { loginApi, meApi, registerApi, type RegisterPayload } from '@/api/auth'
 import type { CurrentUser, MenuItem, RoleCode } from '@/types'
 
 const TOKEN_KEY = 'coursework_token'
@@ -62,6 +62,13 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(username: string, password: string) {
       const response = await loginApi(username, password)
+      this.token = response.data.data.token
+      this.user = response.data.data.user
+      localStorage.setItem(TOKEN_KEY, this.token)
+      localStorage.setItem(USER_KEY, JSON.stringify(this.user))
+    },
+    async register(payload: RegisterPayload) {
+      const response = await registerApi(payload)
       this.token = response.data.data.token
       this.user = response.data.data.user
       localStorage.setItem(TOKEN_KEY, this.token)
