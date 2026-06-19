@@ -47,6 +47,15 @@ const selectableUsers = computed(() => {
   })
 })
 
+const selectableHint = computed(() => {
+  const roleName = roleLabels[form.memberRole] || form.memberRole
+  const roleUsers = users.value.filter((user) => user.status === 1 && user.roles.includes(form.memberRole as RoleCode))
+  if (roleUsers.length === 0) {
+    return `系统中暂无可添加的${roleName}账号。学生和教师可在登录页注册；助教账号需由管理员创建或分配助教角色。`
+  }
+  return `当前课程中未加入的${roleName}账号为空。已有账号若已在成员列表中，不会重复显示。`
+})
+
 watch(
   () => form.memberRole,
   () => {
@@ -129,9 +138,17 @@ onMounted(loadData)
             :label="`${user.realName}（${user.username}）`"
             :value="user.id"
           />
+          <template #empty>
+            <div class="select-empty">
+              {{ selectableHint }}
+            </div>
+          </template>
         </el-select>
         <el-button type="primary" :loading="adding" @click="addMember">添加成员</el-button>
       </div>
+      <p class="member-tip">
+        候选用户来自系统用户库，只显示拥有所选角色且尚未加入当前课程的账号。
+      </p>
     </section>
 
     <DataTableCard title="成员列表" description="课程负责人不可被移除，成员变更由后端权限校验。">
@@ -184,6 +201,19 @@ onMounted(loadData)
 .role-select,
 .user-select {
   width: 100%;
+}
+
+.member-tip {
+  margin: 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.select-empty {
+  padding: 12px 16px;
+  color: #8a94a6;
+  line-height: 1.6;
+  white-space: normal;
 }
 
 @media (max-width: 760px) {
